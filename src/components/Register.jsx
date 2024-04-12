@@ -113,7 +113,9 @@ const Register = () => {
                 <div className="row">
                   <div className="col-12">
                     <hr className="mt-5 mb-4" />
-                    <p className="mt-5 mb-4">Already registered? <Link to="/Login" style={{ color: 'black' }}>Login</Link></p>
+                    <div className="login-link d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end">
+                    <p className="mt-5 mb-4">Already registered? <Link to="/Login" style={{ color: '#fff' }}>Login</Link></p>
+                    </div>
                   </div>
                 </div>
                 

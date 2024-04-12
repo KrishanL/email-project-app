@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Logo from "../assets/logo.png";
 import style from "../css/style.css";
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Header = () => {
   const navigate = useNavigate();
     useEffect(() => {
@@ -29,9 +30,9 @@ const Header = () => {
         });
       }, []);
    
-      const handleAccountClick = () => {
-        navigate('/Register');
-      };
+      // const handleAccountClick = () => {
+      //   navigate('/Register');
+      // };
 
 
 
@@ -69,7 +70,7 @@ const Header = () => {
                             <a className="nav-link fw-semibold" href="#testimonial">Testimonials</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link fw-semibold"  onClick={handleAccountClick}>Account</a>
+                            <Link className="nav-link fw-semibold"  to='/Register'>Account</Link>
                         </li>
                        
                     </ul>

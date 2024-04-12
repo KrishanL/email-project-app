@@ -144,7 +144,9 @@ useEffect(() => {
       const currentDateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
       const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the date part
       
-      console.log(formattedDate); // Output: "2024-04-12"
+      console.log(formattedDate); 
+
+     
       
   return (
  
@@ -169,7 +171,8 @@ useEffect(() => {
                     <hr/>
                     <div className="dropdown pb-4">
                         
-                            <i className="fa fa-sign-out" aria-hidden="true" onClick={handleSignOut}></i> 
+                    <i className="fa fa-sign-out cursor-pointer" aria-hidden="true" onClick={handleSignOut}></i>
+
                        
                     </div>
                 </div>
@@ -189,7 +192,9 @@ useEffect(() => {
                                 </div>
                                 <div className="Orders-btn">
                                     <h6>Unpaid Orders</h6>
-                                    <Button variant='contained' type="button" className="dash-btn">View Detail</Button>
+                                    <Button variant='contained' type="button" className="dash-btn">
+                                    <Link to="/Invoices" className='link'>View Detail</Link>   
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -200,6 +205,7 @@ useEffect(() => {
                     <CircularProgress /> {/* Spinner */}
                     </div>
                 ) : (
+                    Array.isArray(responseData) && responseData.length > 0 ? (
                         <table className="">
                             <thead>
                               <tr>
@@ -211,7 +217,7 @@ useEffect(() => {
                               </tr>
                             </thead>
                             <tbody>
-                         {Array.isArray(responseData) && responseData.map((item, index) => (
+                            {responseData.map((item, index) => (
                        <tr key={index}>
                         <td className='sub-price'>{item.email}</td>
                         <td className='sub-price'>Monthly</td>
@@ -249,11 +255,12 @@ useEffect(() => {
                         
                     </tr>
                 ))}
-
-
-                            </tbody>
+                    </tbody>
                           </table>
-      )}
+                        ) : (
+                            <div className='no-data'>You don't have a Email account. Please purchase a plan.</div>
+                         )
+                         )}
                         </div>
                     
                       <button type="button"

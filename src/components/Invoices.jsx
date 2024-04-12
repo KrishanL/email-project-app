@@ -7,24 +7,37 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 const Invoices = () => {
+const [searchQuery, setSearchQuery] = useState('');
 const navigate = useNavigate();
 const [subscriptionData, setSubscriptionData] = useState(null);
 const [responseData, setResponseData] = useState([]);
 const [isLoading, setIsLoading] = useState(true);
-useEffect(() => {
-    const email = sessionStorage.getItem('email');
-    if (!email) {
-      
-      navigate('/Login');
-    }
-  }, [navigate]);
+
+      useEffect(() => {
+       const email = sessionStorage.getItem('email');
+         if (!email) {
+          navigate('/Login');
+          }
+            }, [navigate]);
 
 
+            const handleSearchChange = (event) => {
+            const query = event.target.value;
+             console.log('Search Query:', query);
+             setSearchQuery(query.toLowerCase());
+            };
+            
+
+            const filteredData = responseData.filter((item) =>
+            item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            `$${item.amount}`.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            item.status.toLowerCase().includes(searchQuery.toLowerCase()) 
+            );
 
 
-      
-      const apiKey = sessionStorage.getItem('email');
-      const emails = sessionStorage.getItem('apiKey');
+            
+            const apiKey = sessionStorage.getItem('email');
+            const emails = sessionStorage.getItem('apiKey');
       //const apiKeys = '963b1ca860cc8942940651303d1477ba29b30e609d0406e42ccdb84cf2e48e2f';
 
 
@@ -91,11 +104,10 @@ useEffect(() => {
                 }
               })
               
-              const date = new Date();
-              const currentDateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-              const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the date part
-              
-              console.log(formattedDate); // Output: "2024-04-12"
+         const date = new Date();
+         const currentDateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+        const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the date part
+       console.log(formattedDate); // Output: "2024-04-12"
               
 
   return (
@@ -120,7 +132,7 @@ useEffect(() => {
                     <hr/>
                     <div className="dropdown pb-4">
                         
-                            <i className="fa fa-sign-out" aria-hidden="true" onClick={HandleSignOut}></i> 
+                    <i className="fa fa-sign-out cursor-pointer" aria-hidden="true" onClick={HandleSignOut}></i>
                     
                     </div>
                 </div>
@@ -134,8 +146,14 @@ useEffect(() => {
                     <p>Download available invoice and Let’s finish your unpaid orders.</p>
                 </div>
                 <div className="">
-                    <input className="server-search" type="search" placeholder="search here"/>
-                </div>
+                <input
+                className="server-search"
+                type="search"
+                placeholder="Search Order Number"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                />
+            </div>
             </div>
             <div className="table-main">
             {isLoading ? (
@@ -143,6 +161,7 @@ useEffect(() => {
                <CircularProgress /> 
              </div>
              ) : (
+                Array.isArray(filteredData) && filteredData.length > 0 ? (
                 <table className="">
                     <thead>
                   
@@ -156,7 +175,7 @@ useEffect(() => {
                       </tr>
                     </thead>
                     <tbody>
-                    {Array.isArray(responseData) && responseData.map((item, index) => (
+                    {filteredData.map((item, index) => (
                          <tr key={index}>
                         <td className='sub-price'>{item.id}</td>
                         <td className='sub-price'>Monthly</td>
@@ -198,6 +217,14 @@ useEffect(() => {
                    
                     </tbody>
                   </table>
+                ) : (
+           <div className='no-data'>
+            No invoices found. It seems you haven't made any purchases yet. 
+            <br /> 
+            Please consider purchasing a plan to access your invoices.
+            </div>
+
+                )
                 )}
             </div>
             <div className="dash-footer">
