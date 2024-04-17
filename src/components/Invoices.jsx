@@ -11,14 +11,16 @@ const [searchQuery, setSearchQuery] = useState('');
 const navigate = useNavigate();
 const [subscriptionData, setSubscriptionData] = useState(null);
 const [responseData, setResponseData] = useState([]);
+const [email, setEmail] = useState();
 const [isLoading, setIsLoading] = useState(true);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-      useEffect(() => {
-       const email = sessionStorage.getItem('email');
-         if (!email) {
-          navigate('/Login');
-          }
-            }, [navigate]);
+    //   useEffect(() => {
+    //    const email = sessionStorage.getItem('email');
+    //      if (!email) {
+    //       navigate('/Login');
+    //       }
+    //         }, [navigate]);
 
 
             const handleSearchChange = (event) => {
@@ -94,23 +96,28 @@ const [isLoading, setIsLoading] = useState(true);
             };
 
 
-            //Redirect user to login..
-
-            useEffect (() => {
-                if(!emails) {
-                    navigate("/Login");
-                }else {
-                    console.log("The email is ", emails);
-                }
-              })
+           
               
          const date = new Date();
          const currentDateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
         const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the date part
        console.log(formattedDate); // Output: "2024-04-12"
               
-
+       //const Emails = sessionStorage.getItem('email');
+       useEffect (() => {
+        const Emails = sessionStorage.getItem('email');
+        if(!Emails) {
+            navigate("/Login");
+            setEmail(Emails);
+        }else {
+            setIsLoggedIn(true);
+            console.log("The email is ", Emails);
+        }
+      })
   return (
+    <div>
+        {isLoggedIn && (
+   
    <section>
     <div className="container-fluid">
         <div className="row flex-nowrap">
@@ -228,7 +235,7 @@ const [isLoading, setIsLoading] = useState(true);
                 )}
             </div>
             <div className="dash-footer">
-                <p>© 2023. DeepVPN. All Rights reserved.</p>
+                <p>© 2023. EMAIL. All Rights reserved.</p>
             </div>
         </div>
 
@@ -236,7 +243,10 @@ const [isLoading, setIsLoading] = useState(true);
             </div>
         </div>
     </div>
+      
    </section>
+)}
+   </div>
   )
 }
 

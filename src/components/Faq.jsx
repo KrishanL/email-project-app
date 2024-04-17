@@ -104,7 +104,7 @@ const Faq = () => {
                     <div id="collapseseven" className="accordion-collapse collapse" aria-labelledby="headingseven"
                         data-bs-parent="#accordionExample">
                         <div className="accordion-body">
-                            <strong>Utilize your existing online presence,</strong> social media channels, email list, and website to promote your email offerings. Share compelling content, testimonials, and special promotions to attract subscribers and encourage sign-ups.
+                            <strong className='faq'>Utilize your existing online presence,</strong> social media channels, email list, and website to promote your email offerings. Share compelling content, testimonials, and special promotions to attract subscribers and encourage sign-ups.
                         </div>
                     </div>
                 </div>  

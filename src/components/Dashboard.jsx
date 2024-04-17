@@ -13,6 +13,8 @@ const Dashboard = () => {
 const navigate = useNavigate();
 const basicAuth = 'QVIxY0dmdkxPUzM4LTFYSWdhdENIRVhNcnlqYVQxdHZZMEwwWXdXT0dvMkhLT1JFQzRTWmE4NlUwaXdoNVBJc0QxSFFLTm41N1pQUGRpLUc6RVB5RGxlQzJvX3ZPQXNnUnVvMncwZ0c1dHplVEVOQmhIc3MwNWFxbVZMT0Z5OFJzN1JEM2xqTGRpd043WE1NX3hxcjVJNEdZN3FxVHU4Ul8';
 const location = useLocation();
+const [email, setEmail] = useState('');
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [checkout, setCheckout] = useState(false);
 const [data, setData] = useState(null);
 const [activeIndex, setActiveIndex] = useState(null);
@@ -28,18 +30,18 @@ const handleCheckout = () => {
 };
 
 //getting payerId..
-useEffect(() => {
-  const getQueryParam = (name) => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
-  };
-  const tokens = getQueryParam('token');
-  if(tokens) {
-  const message = document.getElementById("success-paypal");
-  message.innerHTML = "<strong className='success'>Payment Successfully done</strong>";
- // console.log('id:', payerId);
-  }
-}, []);
+// useEffect(() => {
+//   const getQueryParam = (name) => {
+//     const params = new URLSearchParams(window.location.search);
+//     return params.get(name);
+//   };
+//   const tokens = getQueryParam('token');
+//   if(tokens) {
+//   const message = document.getElementById("success-paypal");
+//   message.innerHTML = "<strong className='success'>Payment Successfully done</strong>";
+//  // console.log('id:', payerId);
+//   }
+// }, []);
 
 
 
@@ -75,8 +77,8 @@ useEffect(() => {
     
      const apiKey = sessionStorage.getItem('email');
      const emails = sessionStorage.getItem('apiKey');
-     console.log("The api key",apiKey);
-     console.log("The email is", emails);
+     //console.log("The api key",apiKey);
+     //console.log("The email is", emails);
 
 
 
@@ -124,34 +126,41 @@ useEffect(() => {
       
         fetch("https://166.88.198.78/admin/logout", requestOptions)
           .then((response) => {
-            sessionStorage.removeItem('apiKey');
+            sessionStorage.removeItem('email');
             navigate('/Login');
           })
           .catch((error) => console.error(error));
       };
       
-      
+      const Email = sessionStorage.getItem('email');
+      //console.log("The email is ", Email);
       useEffect (() => {
-        if(!emails) {
+        const Emails = sessionStorage.getItem('email');
+        if(!Emails) {
             navigate("/Login");
+            setEmail(Emails);
         }else {
-            console.log("The email is ", emails);
+            setIsLoggedIn(true);
+            console.log("The email is ", Emails);
         }
       })
 
 
       const date = new Date();
       const currentDateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-      const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the date part
-      
+      const formattedDate = currentDateUTC.toISOString().split('T')[0]; // Extracting only the 
       console.log(formattedDate); 
 
      
       
   return (
- 
+   <div>
+       {isLoggedIn && (
+
     <section>
+     
      <div className="container-fluid">
+  
         <div className="row flex-nowrap">
             <div className="desh-main col-auto col-md-3 col-xl-2 px-sm-2 px-1">
                 <div className="d-flex flex-column align-items-md-center align-items-sm-start pt-2 text-white min-vh-100">
@@ -171,7 +180,7 @@ useEffect(() => {
                     <hr/>
                     <div className="dropdown pb-4">
                         
-                    <i className="fa fa-sign-out cursor-pointer" aria-hidden="true" onClick={handleSignOut}></i>
+                    <i className="fa fa-sign-out cursor-pointer" aria-hidden="true" onClick={handleSignOut}>Signout</i>
 
                        
                     </div>
@@ -247,7 +256,7 @@ useEffect(() => {
                     {item.status === 'CANCELLED' ||  new Date(item.date) > new Date() ? (
                             <Button type="submit" variant='contained' id='renew'  disabled>Pay Now</Button>
                         ) : (
-                            <Button type="submit" variant='contained'  >Pay Now</Button>
+                            <Button type="submit" variant='contained' >Pay Now</Button>
                         )}
 
                     </form>
@@ -270,7 +279,7 @@ useEffect(() => {
                     Buy Now
                     </button> 
                     <div className="dash-footer">
-                     <p>© 2023. DeepVPN. All Rights reserved.</p>
+                     <p>© 2024. EMAIL. All Rights reserved.</p>
                     </div>
                     
                 </div>
@@ -349,7 +358,8 @@ useEffect(() => {
                     
                 </div> 
 </section>
-
+   )}
+   </div>
  
   )
 }

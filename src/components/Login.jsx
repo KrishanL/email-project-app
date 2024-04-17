@@ -9,12 +9,13 @@ import { Button } from '@mui/material';
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().required('Required').min(8, 'Password must be at least 8 characters'),
-  privileges: Yup.string().required('Required'), // Add validation for privileges field
+  privileges: Yup.string().required('Required'), 
 });
 
 const Login = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const login = "Login";
   const navigate = useNavigate();
   
   const loginUser = async (values) => {
@@ -26,34 +27,22 @@ const Login = () => {
       formData.append('email', values.email);
       formData.append('password', values.password);
   
-      const response = await fetch(`https://166.88.198.78/admin/login`, {
+      const response = await fetch(`https://codexstream.com/ipn_register?Type=${login}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${base64Credentials}`,
+         // 'Authorization': `Basic ${base64Credentials}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData.toString(),
       });
   
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Failed to login:', errorText);
-        throw new Error('Failed to login');
-      }
-      
      
       const responseData = await response.json();
       
       if (responseData.status === "ok") {
-        const apiKey = responseData.api_key;
-        const email = responseData.email;
-        //console.log(apiKey);
-        //console.log(email);
-        sessionStorage.setItem('apiKey', apiKey);
-        sessionStorage.setItem('email', email);
-        setTimeout(() => {
-          navigate('/Dashboard');
-      }, 100);
+         sessionStorage.setItem('email', responseData.email);
+         navigate('/Dashboard');
+         console.log("successfully Login");
       } else {
         setError("Invalid Email or Password");
         setOpen(true);
@@ -62,7 +51,9 @@ const Login = () => {
       }
      
     } catch (error) {
+      setError('Failed to login');
       console.error('Error logging in:', error);
+     // alert("Failed to login");
       setError('Failed to login');
     }
   };
@@ -97,9 +88,11 @@ const Login = () => {
                 {/* showing alert error */}
                 <Snackbar 
                 open={open} 
-               autoHideDuration={6000} 
+               autoHideDuration={4000} 
                onClose={() => setOpen(false)}
-             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
+             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+             
+              >
               <Alert severity="error" onClose={() => setOpen(false)}>
               {error}
               </Alert>
@@ -110,7 +103,7 @@ const Login = () => {
                     email: '',
                     password: '',
                     remember_me: false,
-                    privileges: 'user', // Set default value for privileges
+                    privileges: 'user',
                   }}
                   validationSchema={loginSchema}
                   onSubmit={handleSubmit}
